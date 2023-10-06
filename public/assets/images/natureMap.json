@@ -36,7 +36,20 @@
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
  "tileheight":32,
- "tilesets":[ 
+ "tilesets":[
+        {
+         "columns":30,
+         "firstgid":1,
+         "image":"..\/RPG Nature Tileset Autumn.png",
+         "imageheight":288,
+         "imagewidth":480,
+         "margin":0,
+         "name":"RPG Nature Tileset Autumn",
+         "spacing":0,
+         "tilecount":540,
+         "tileheight":16,
+         "tilewidth":16
+        }, 
         {
          "columns":20,
          "firstgid":541,

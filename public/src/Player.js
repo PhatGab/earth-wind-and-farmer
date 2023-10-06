@@ -5,6 +5,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         super(scene.matter.world, x, y, texture, frame);
         this.scene.add.existing(this);
 
+        this.inventory = [];
+
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
         const playerCollider = Bodies.circle(this.x, this.y, 12, {isSensor: false, label: 'playerCollider'});
         const playerSensor = Bodies.circle(this.x, this.y, 24, {isSensor: true, label: 'playerSensor'});
