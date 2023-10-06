@@ -1,0 +1,7 @@
+.main-scene-info {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    z-index: 1;
+    position: fixed;
+    top: .75rem;
+    right: .5rem;
+}
