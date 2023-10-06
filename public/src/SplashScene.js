@@ -16,9 +16,6 @@ export default class SplashScene extends Phaser.Scene {
         
         splash.setScale(.5, .5);
       
-
-
-
         // Add a delay before transitioning to the main game scene
         this.time.delayedCall(3000, this.startMainScene, [], this);
     }
