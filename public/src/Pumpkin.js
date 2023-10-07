@@ -21,13 +21,14 @@ export default class Pumpkin extends Prop {
         this.y = this.y + this.height * (0 - 0.5);
 
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-        const pumpkinCollider = Bodies.circle(this.x, this.y, 12, { isSensor: false, label: `${this.id}`});
-        const pumpkinSensor = Bodies.circle(this.x, this.y, 24, { isSensor: true, label: 'pumpkinSensor' });
+        const pumpkinCollider = Bodies.circle(this.x, this.y, 6, { isSensor: false, label: `${this.id}`});
+        const pumpkinSensor = Bodies.circle(this.x, this.y, 14, { isSensor: true, label: 'pumpkinSensor' });
 
         const compoundBody = Body.create({
             parts: [pumpkinCollider, pumpkinSensor],
             frictionAir: 0.35
         });
+        this.setScale(0.75, 0.75);
         this.setExistingBody(compoundBody);
         this.setStatic(true);
         this.setOrigin(0.5, 0.5);

@@ -61,13 +61,7 @@ export default class MainScene extends Phaser.Scene {
       this.isPlaying = !this.isPlaying;
     })
 
-    // JILL TO DO: 
-    // Add conditionals for :
-    // Pumpkins off the map
-    // Pumpkins in existing places. (Maybe a value change in Pumpkin.js, check to see if something is there?)
-    // Hacky way: store values in array and check against?
-
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 9; i++) {
 
       const xValue = this.getPositionValue('x');
       const yValue = this.getPositionValue('y');
@@ -128,7 +122,7 @@ export default class MainScene extends Phaser.Scene {
     this.positionValues[positionType] = this.positionValues[positionType].filter(value => value !== selectedVal);
 
     // Add small random value to value so the pumpkin won't always fall on a certain vertices, but still not overlap
-    selectedVal = selectedVal + Math.floor(Math.random() * 7);
+    selectedVal = selectedVal + Math.floor(Math.random() * 3);
 
     return selectedVal;
   }

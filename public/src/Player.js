@@ -10,8 +10,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.inventory = new Inventory();
 
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-        const playerCollider = Bodies.circle(this.x, this.y, 12, { isSensor: false, label: 'playerCollider' });
-        const playerSensor = Bodies.circle(this.x, this.y, 24, { isSensor: true, label: 'playerSensor' });
+        const playerCollider = Bodies.circle(this.x, this.y, 8, { isSensor: false, label: 'playerCollider' });
+        const playerSensor = Bodies.circle(this.x, this.y, 16, { isSensor: true, label: 'playerSensor' });
         const compoundBody = Body.create({
             parts: [playerCollider, playerSensor],
             frictionAir: 0.35
@@ -38,6 +38,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     collisionHandler(player, e){
 
         let bumpedPumpkinID = '';
+
+        if (e.pairs[1]) {
+            console.log('e.pairs[1].bodyA.label', e.pairs[1].bodyA)
+            console.log('e.pairs[1].bodyB.label', e.pairs[1].bodyB)
+        }
 
         if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label === 'playerSensor' && e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) || (e.pairs[1].bodyB.label === 'playerSensor' && e.pairs[1].bodyA.label.startsWith('pumpkinCollider')))) {
             console.log('YOU JUST BUMPED A PUMP');
