@@ -2,15 +2,18 @@
 import SplashScene from "./SplashScene.js";
 import MainScene from "./MainScene.js"
 
+import { gameHeight, gameWidth } from './constants.js';
+
 
 // Create an object to contain the game configuration
 const gameConfig = {
-    width: 512,
-    height: 512,
+    width: gameWidth,
+    height: gameHeight,
     backgroundColor: '#fff4b0',
     type: Phaser.AUTO,
     parent: 'earth-wind-farmer',
-    scene: [SplashScene, MainScene],
+    // scene: [SplashScene, MainScene],
+    scene: [MainScene],
     // scale gives the pixelated vieaw
     scale: {
         zoom: 2

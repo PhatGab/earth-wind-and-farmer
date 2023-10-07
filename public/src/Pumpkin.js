@@ -11,8 +11,10 @@ export default class Pumpkin extends Prop {
             scene,
             x: pumpkinConfig.x,
             y: pumpkinConfig.y,
-            zIndex: 1
+            texture: pumpkinConfig.texture
         });
+
+        this.scene = scene;
 
         this.id = pumpkinConfig.id;
 
@@ -28,7 +30,7 @@ export default class Pumpkin extends Prop {
         });
         this.setExistingBody(compoundBody);
         this.setStatic(true);
-        this.setOrigin(0.5, 0);
+        this.setOrigin(0.5, 0.5);
 
    }
 

@@ -28,6 +28,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         scene.load.animation('wizard', 'assets/images/wizard_anim.json');
         scene.load.atlas('princess', 'assets/images/princess.png', 'assets/images/princess_atlas.json');
         scene.load.animation('princess', 'assets/images/princess_anim.json');
+        scene.load.spritesheet('items','assets/images/items.png', { frameWidth: 32, frameHeight: 32 });
     }
 
     get velocity() {

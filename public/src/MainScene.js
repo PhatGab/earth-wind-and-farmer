@@ -1,10 +1,19 @@
+
 import Player from "./Player.js";
 import Pumpkin from './Pumpkin.js';
+
+import { gameHeight, gameWidth } from './constants.js';
 
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super("MainScene");
-    this.enemies = [];
+    this.pumpkins = [];
+    this.pumpkinCount = 0;
+
+    this.positionValues = {
+      x: [50, 100, 150, 200, 250, 300, 350, 400, 450],
+      y: [50, 100, 150, 200, 250, 300, 350, 400, 450]
+    }
   }
 
   preload() {
@@ -40,7 +49,6 @@ export default class MainScene extends Phaser.Scene {
     });
 
 
-
     // CREATE AUDIO
     this.song = this.sound.add('theme', { volume: 0.5 });
     // TOGGLE THIS LINE BELOW TO STOP MUSIC ON LOAD
@@ -59,11 +67,11 @@ export default class MainScene extends Phaser.Scene {
     // Pumpkins in existing places. (Maybe a value change in Pumpkin.js, check to see if something is there?)
     // Hacky way: store values in array and check against?
 
-    this.pumpkins = [];
-
     for (let i = 0; i < 10; i++) {
-      const xValue = Math.floor(Math.random() * 500) + 20;
-      const yValue = Math.floor(Math.random() * 500) + 20;
+
+      const xValue = this.getPositionValue('x');
+      const yValue = this.getPositionValue('y');
+
       const pumpkinID = 'pumpkinCollider' + i;
       const newPumpkin = new Pumpkin({
         scene: this,
@@ -72,9 +80,11 @@ export default class MainScene extends Phaser.Scene {
           id: pumpkinID,
           x: xValue,
           y: yValue,
-          type: 'pumpkin'
+          type: 'pumpkin',
+          texture: 'pumpkin'
         }
       });
+
       this.pumpkins.push(newPumpkin);
       this.add.existing(newPumpkin);
     }
@@ -100,6 +110,27 @@ export default class MainScene extends Phaser.Scene {
       foliageItem.setStatic(true);
       this.add.existing(foliageItem);
     })
+  }
+
+  getPositionValue(positionType) {
+
+    let selectedVal = 0;
+
+    // If there is only one value left, return that
+    if (this.positionValues[positionType].length === 1) {
+      return selectedVal = this.positionValues[positionType][0];
+    }
+
+    // Get random value from available array
+    selectedVal = this.positionValues[positionType][Math.floor(Math.random() * this.positionValues[positionType].length)];
+
+    // Remove selected value from the array so ti won't be duplicated
+    this.positionValues[positionType] = this.positionValues[positionType].filter(value => value !== selectedVal);
+
+    // Add small random value to value so the pumpkin won't always fall on a certain vertices, but still not overlap
+    selectedVal = selectedVal + Math.floor(Math.random() * 7);
+
+    return selectedVal;
   }
 
   update() {
