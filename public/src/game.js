@@ -1,4 +1,5 @@
 
+import SplashScene from "./SplashScene.js";
 import MainScene from "./MainScene.js"
 
 
@@ -9,7 +10,7 @@ const gameConfig = {
     backgroundColor: '#fff4b0',
     type: Phaser.AUTO,
     parent: 'earth-wind-farmer',
-    scene: [MainScene],
+    scene: [SplashScene, MainScene],
     // scale gives the pixelated vieaw
     scale: {
         zoom: 2
