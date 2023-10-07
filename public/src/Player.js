@@ -1,21 +1,26 @@
 
+import Inventory from './Inventory.js'
+
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor(data) {
-        let { scene, x, y, texture, frame } = data;
+        const { scene, x, y, texture, frame } = data;
         super(scene.matter.world, x, y, texture, frame);
         this.scene.add.existing(this);
 
-        this.inventory = [];
+        this.inventory = new Inventory();
 
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-        const playerCollider = Bodies.circle(this.x, this.y, 12, {isSensor: false, label: 'playerCollider'});
-        const playerSensor = Bodies.circle(this.x, this.y, 24, {isSensor: true, label: 'playerSensor'});
+        const playerCollider = Bodies.circle(this.x, this.y, 12, { isSensor: false, label: 'playerCollider' });
+        const playerSensor = Bodies.circle(this.x, this.y, 24, { isSensor: true, label: 'playerSensor' });
         const compoundBody = Body.create({
             parts: [playerCollider, playerSensor],
-            frictionAir: 0.35 
+            frictionAir: 0.35
         });
         this.setExistingBody(compoundBody);
         this.setFixedRotation();
+
+        this.scene.matter.world.on('collisionstart', (event) => this.collisionHandler(this, event));
+
     }
 
     static preload(scene) {
@@ -29,8 +34,43 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         return this.body.velocity;
     }
 
+    collisionHandler(player, e){
+
+        let bumpedPumpkinID = '';
+
+        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label === 'playerSensor' && e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) || (e.pairs[1].bodyB.label === 'playerSensor' && e.pairs[1].bodyA.label.startsWith('pumpkinCollider')))) {
+            console.log('YOU JUST BUMPED A PUMP');
+            
+            player.inventory.addItem({
+                name: 'pumpkin',
+                quantity: 1
+            });
+
+            if (e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) {
+                bumpedPumpkinID = e.pairs[1].bodyB.label;
+            } else if (e.pairs[1].bodyA.label.startsWith('pumpkinCollider')) {
+                bumpedPumpkinID = e.pairs[1].bodyA.label;
+            }
+        }
+
+        const pumpkins = player.scene.pumpkins;
+        const pumpToRemove = pumpkins?.find(pump => pump.id === bumpedPumpkinID);
+        
+        if (pumpToRemove) {
+            pumpToRemove.destroy();
+        }
+        
+        // JILL -- THIS DOES NOT BELONG IN PLAYER.JS
+        const pumpkinQty = player.inventory.getItemQuantity('pumpkin');
+        player.scene.counter.setText(pumpkinQty);
+        player.scene.counter.setX(255);
+
+        if (pumpkinQty >= 6) {
+            player.scene.successText.setText('YOU WIN!');
+        }
+    };
+
     update() {
-        // this.anims.play('wizard_walk', true);
         const speed = 2.5;
         let playerVelocity = new Phaser.Math.Vector2();
         if (this.inputKeys.left.isDown) {

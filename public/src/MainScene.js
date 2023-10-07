@@ -1,4 +1,5 @@
 import Player from "./Player.js";
+import Pumpkin from './Pumpkin.js';
 
 export default class MainScene extends Phaser.Scene {
   constructor() {
@@ -8,8 +9,8 @@ export default class MainScene extends Phaser.Scene {
 
   preload() {
     Player.preload(this);
+    Pumpkin.preload(this);
     this.load.image('tiles', 'assets/images/RPGNatureTilesetExtruded.png');
-    // this.load.tilemapTiledJSON('map', 'assets/images/natureMap.json');
     this.load.tilemapTiledJSON('map', 'assets/images/map.json');
     this.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
     this.load.audio('theme', 'assets/audio/Earth_Wind_And_Farmer.mp3');
@@ -26,9 +27,6 @@ export default class MainScene extends Phaser.Scene {
     layer1.setCollisionByProperty({ collides: true });
     this.matter.world.convertTilemapLayer(layer1);
     const layer2 = map.createStaticLayer('Tile Layer 2', tileset, 0, 0);
-
-
-    this.addFoliage();
 
     // CREATE PLAYER
     this.player = new Player({ scene: this, x: 50, y: 50, texture: 'princess', frame: 'princess_walk_1' });
@@ -54,6 +52,45 @@ export default class MainScene extends Phaser.Scene {
       this.song.setMute(this.isPlaying);
       this.isPlaying = !this.isPlaying;
     })
+
+    // JILL TO DO: 
+    // Add conditionals for :
+    // Pumpkins off the map
+    // Pumpkins in existing places. (Maybe a value change in Pumpkin.js, check to see if something is there?)
+    // Hacky way: store values in array and check against?
+
+    this.pumpkins = [];
+
+    for (let i = 0; i < 10; i++) {
+      const xValue = Math.floor(Math.random() * 500) + 20;
+      const yValue = Math.floor(Math.random() * 500) + 20;
+      const pumpkinID = 'pumpkinCollider' + i;
+      const newPumpkin = new Pumpkin({
+        scene: this,
+        pumpkinConfig: {
+          name: 'pumpkin',
+          id: pumpkinID,
+          x: xValue,
+          y: yValue,
+          type: 'pumpkin'
+        }
+      });
+      this.pumpkins.push(newPumpkin);
+      this.add.existing(newPumpkin);
+    }
+
+    // LOAD PUMPKIN COUNTER
+    this.counter = this.add.text(160, 40, 'NO PUMPKINS YET!', {
+      fontFamily: 'Arial',
+			fontSize: '28px',
+			color: '#e9e9e9',
+    });
+
+    this.successText = this.add.text(190, 300, '', {
+      fontFamily: 'Arial',
+			fontSize: '32px',
+			color: 'orange',
+    });
   }
 
   addFoliage() {

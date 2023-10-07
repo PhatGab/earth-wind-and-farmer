@@ -2,7 +2,7 @@
 export default class Inventory {
 
     constructor() {
-        this.items = []
+        this.items = [];
     }
 
     addItem(item) {
@@ -13,6 +13,7 @@ export default class Inventory {
         } else {
             this.items[itemKey] = item;
         }
+
     }
 
     removeItem(item) {
@@ -29,5 +30,10 @@ export default class Inventory {
     getItem(item) {
         return this.items[item];
     }
+
+    getItemQuantity(itemName) {
+        return Object.values(this.items).filter(i=>i.name===itemName).map(i => i.quantity).reduce((accumulator, currentValue) => accumulator + currentValue,0);
+      }
+
 
 }
