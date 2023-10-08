@@ -37,7 +37,7 @@ export default class MainScene extends Phaser.Scene {
     Sign.preload(this);
     Farmhouse.preload(this);
     this.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
-    this.load.audio('theme', 'assets/audio/Earth_Wind_And_Farmer.mp3');
+    this.load.audio('theme', 'assets/audio/theme.mp3');
 
     this.load.image('tiles', 'assets/plowed_soil.png');
     this.load.tilemapTiledJSON('map', 'assets/map1.json');
