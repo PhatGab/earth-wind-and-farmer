@@ -32,23 +32,22 @@ export default class MainScene extends Phaser.Scene {
     MonstantoEmployee.preload(this);
     Pumpkin.preload(this);
     Sign.preload(this);
-    this.load.image('tiles', 'assets/images/RPGNatureTilesetExtruded.png');
-    this.load.tilemapTiledJSON('map', 'assets/images/map.json');
     this.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
     this.load.audio('theme', 'assets/audio/Earth_Wind_And_Farmer.mp3');
+
+    this.load.image('tiles', 'assets/plowed_soil.png')
+    this.load.tilemapTiledJSON('map', 'assets/map1.json')
   }
 
   create() {
 
     // CREATE MAP
-    const map = this.make.tilemap({ key: 'map' });
-    this.map = map;
-    // const tileset = map.addTilesetImage('RPG Nature Tileset','tiles', 32, 32, 0, 0);
-    const tileset = map.addTilesetImage('RPG Nature Tileset', 'tiles', 32, 32, 1, 2);
+    const map = this.make.tilemap({ key: 'map', tileWidth: 32, tileHeight: 32 });
+    const tileset = map.addTilesetImage('plowed_soil', 'tiles');
+
+
     const layer1 = map.createStaticLayer('Tile Layer 1', tileset, 0, 0);
-    layer1.setCollisionByProperty({ collides: true });
-    this.matter.world.convertTilemapLayer(layer1);
-    const layer2 = map.createStaticLayer('Tile Layer 2', tileset, 0, 0);
+    const layer2 = map.createStaticLayer('FenceLayer', tileset, 0, 0);
 
     // CREATE PLAYER
     this.player = new Player({ scene: this, x: 50, y: 50, texture: 'princess', frame: 'princess_walk_1', id: 'playerCharacter', depth: 10 });
@@ -65,7 +64,7 @@ export default class MainScene extends Phaser.Scene {
     // CREATE AUDIO
     this.song = this.sound.add('theme', { volume: 0.5 });
     // TOGGLE THIS LINE BELOW TO STOP MUSIC ON LOAD
-    this.song.play();
+    // this.song.play();
     this.isPlaying = true;
 
     const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
