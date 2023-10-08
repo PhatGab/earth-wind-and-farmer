@@ -1,6 +1,6 @@
 
 import Inventory from './Inventory.js'
-import Sign from './Sign.js';
+import MonstantoEmployee from './MonsantoEmployee.js';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor(data) {
@@ -21,11 +21,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.scene.matter.world.on('collisionstart', (event) => this.collisionHandler(this, event));
-
         this.scene.matter.world.on('collisionactive', (event) => this.interactWithNPC(this, event));
 
-        // this.npcTextShown = false;
-        this.currentNPCCollisionID = 0;
+        this.scene.matter.world.on('collisionend', (event) => this.interactWithSign(this, event));
 
     }
 
@@ -75,11 +73,24 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 player.scene.counter.setX(255);
             }
     
-            if (pumpkinQty >= 6) {
-                player.scene.successText.setText('YOU WIN!');
+            if (pumpkinQty == 5 && !player.scene.employeeShown) {
+                const playerCoordinates = e.pairs[1].bodyA.position;
+
+                player.scene.employeeShown = true;
+
+                const employee = new MonstantoEmployee({scene: player.scene, x: 50, y: 50, texture: 'employee', frame: 'townsfolk_f_idle_1', id: 'employee', playerCoordinates});
+                employee.enterScene(player);
             }
-        } else if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'signCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'signCollider'))) {
-            Sign.readSign(player.scene);
+        } 
+        else if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'signCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'signCollider'))) {
+            player.scene.sign.readSign(player.scene);
+            player.scene.signShown = true;
+
+            setTimeout(() => {
+                if (player.scene.signShown) {
+                    player.scene.sign.hideSign(player.scene);
+                }
+            }, 5000);
         } 
     };
 
@@ -111,6 +122,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             }, 3000);
         }
 
+    }
+
+    interactWithSign(player, e) {
+        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'signCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'signCollider'))) {
+            player.scene.sign.hideSign(player.scene);
+        }
     }
 
     update() {

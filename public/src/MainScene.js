@@ -1,5 +1,6 @@
 
 import Player from "./Player.js";
+import MonstantoEmployee from "./MonsantoEmployee.js";
 import Pumpkin from './Pumpkin.js';
 import Sign from './Sign.js';
 
@@ -19,10 +20,16 @@ export default class MainScene extends Phaser.Scene {
     this.npcTextShown = false;
     this.npcText = '';
     this.npcBumpCounter = 0;
+
+    this.employeeShown = false;
+
+    this.signShown = false;
+
   }
 
   preload() {
     Player.preload(this);
+    MonstantoEmployee.preload(this);
     Pumpkin.preload(this);
     Sign.preload(this);
     this.load.image('tiles', 'assets/images/RPGNatureTilesetExtruded.png');
@@ -60,12 +67,12 @@ export default class MainScene extends Phaser.Scene {
     // TOGGLE THIS LINE BELOW TO STOP MUSIC ON LOAD
     // this.song.play();
     this.isPlaying = true;
-    const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    // const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    spaceBar.on('down', () => {
-      this.song.setMute(this.isPlaying);
-      this.isPlaying = !this.isPlaying;
-    })
+    // spaceBar.on('down', () => {
+    //   this.song.setMute(this.isPlaying);
+    //   this.isPlaying = !this.isPlaying;
+    // });
 
     for (let i = 0; i < 9; i++) {
 
@@ -111,8 +118,8 @@ export default class MainScene extends Phaser.Scene {
 
     // Create sign
     this.sign = new Sign({ scene: this });
+    this.setUpSign();
 
-  
   }
 
   getPositionValue(positionType) {
@@ -134,6 +141,19 @@ export default class MainScene extends Phaser.Scene {
     selectedVal = selectedVal + Math.floor(Math.random() * 3);
 
     return selectedVal;
+  }
+
+  setUpSign() {
+    this.signText = this.add.text(320, 160, "", {
+        fontFamily: fontFamily,
+        fontSize: '22px',
+        color: 'darkslategrey',
+        // stroke: "#000000",
+        // strokeThickness: 6,
+        // fill: 'red',
+        backgroundColor: '#A0522D',
+        wordWrap: { width: 200, useAdvancedWrap: true }
+    });
   }
 
   update() {
