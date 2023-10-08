@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <editorsettings>
+  <export target="ewfmap.tmj" format="json"/>
+ </editorsettings>
+ <tileset firstgid="1" name="plowed_soil" tilewidth="32" tileheight="32" tilecount="18" columns="3">
+  <image source="../../../../../../Downloads/submission_daneeklu/submission_daneeklu/tilesets/plowed_soil.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="plants" tilewidth="32" tileheight="32" tilecount="108" columns="9">
+  <image source="../../../../../../Downloads/submission_daneeklu/submission_daneeklu/tilesets/plants.png" width="288" height="384"/>
+  <tile id="83">
+   <objectgroup draworder="index" id="2">
+    <object id="3" x="14.7156" y="23.2217" width="0.0850611" height="0.0850611">
+     <ellipse/>
+    </object>
+    <object id="4" x="2.21159" y="10.8878" width="26.5391" height="18.9686">
+     <ellipse/>
+    </object>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <tileset firstgid="127" name="fence" tilewidth="32" tileheight="32" tilecount="18" columns="3">
+  <image source="../../../../../../Downloads/submission_daneeklu/submission_daneeklu/tilesets/fence.png" width="96" height="192"/>
+  <tile id="0">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="9.61191" y="2.6369" width="22.5412" height="23.1366"/>
+   </objectgroup>
+  </tile>
+  <tile id="1">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="2.80702" width="33.2589" height="22.6263"/>
+   </objectgroup>
+  </tile>
+  <tile id="2">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="-0.170122" y="3.57257" width="20.2446" height="21.8607"/>
+   </objectgroup>
+  </tile>
+  <tile id="4">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="11.4833" y="-0.0850611" width="8.67624" height="32.2382"/>
+   </objectgroup>
+  </tile>
+  <tile id="6">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="10.2924" y="3.14726" width="21.6906" height="28.8357"/>
+   </objectgroup>
+  </tile>
+  <tile id="8">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0.0850611" y="2.89208" width="19.9043" height="22.4561"/>
+    <object id="2" x="11.7384" y="3.14726" width="8.50611" height="28.7507"/>
+    <object id="3" x="13.95" y="-5.10367"/>
+   </objectgroup>
+  </tile>
+  <tile id="12">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="11.8235" y="0.0850611" width="20.84" height="25.3482"/>
+   </objectgroup>
+  </tile>
+  <tile id="14">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0.0850611" y="0" width="18.6284" height="24.5827"/>
+    <object id="2" x="6.20946" y="-1.19086"/>
+   </objectgroup>
+  </tile>
+  <tile id="15">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="-0.340245" y="2.72196" width="32.5784" height="22.3711"/>
+   </objectgroup>
+  </tile>
+  <tile id="16">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="-1.02073" y="1.61616" width="33.2589" height="23.5619"/>
+   </objectgroup>
+  </tile>
+  <tile id="17">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="-0.850611" y="2.21159" width="33.344" height="23.647"/>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="16" height="16">
+  <data encoding="csv">
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16
+</data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="16" height="16">
+  <data encoding="csv">
+133,128,128,128,128,128,142,143,144,128,128,128,128,128,128,135,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+131,0,0,0,0,0,0,0,0,0,0,0,0,0,0,131,
+139,128,128,128,128,128,128,128,128,128,128,128,128,128,128,141
+</data>
+ </layer>
+ <layer id="3" name="Tile Layer 3" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,83,0,0,0,0,0,83,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,102,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,49,0,0,0,0,102,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,83,0,0,0,0,
+0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,
+0,0,0,83,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,102,0,0,0,0,83,0,0,
+0,0,0,0,0,0,102,28,0,0,0,0,0,0,0,0,
+0,0,0,83,0,0,0,0,0,0,0,0,102,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

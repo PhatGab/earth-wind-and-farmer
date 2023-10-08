@@ -10,7 +10,9 @@ const gameConfig = {
     backgroundColor: '#fff4b0',
     type: Phaser.AUTO,
     parent: 'earth-wind-farmer',
-    scene: [SplashScene, MainScene],
+    scene: [
+        //SplashScene, 
+        MainScene],
     // scale gives the pixelated vieaw
     scale: {
         zoom: 2
@@ -18,7 +20,7 @@ const gameConfig = {
     physics: {
         default: 'matter',
         matter: {
-            debug: false,
+            debug: true,
             // turn gravity off -- not a platforming 2d game
             gravity: { y: 0 }
         },
@@ -26,5 +28,9 @@ const gameConfig = {
     }
 }
 
-//const game = new Phaser.Game(gameConfig);
-new Phaser.Game(gameConfig);
+
+
+
+
+export const game = new Phaser.Game(gameConfig);
+// new Phaser.Game(gameConfig);
