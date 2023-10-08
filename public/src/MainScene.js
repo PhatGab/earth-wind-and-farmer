@@ -68,7 +68,7 @@ this.FarmhouseShown = false;
     // CREATE AUDIO
     this.song = this.sound.add('theme', { volume: 0.5 });
     // TOGGLE THIS LINE BELOW TO STOP MUSIC ON LOAD
-    // this.song.play();
+    this.song.play();
     this.isPlaying = true;
 
     const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
