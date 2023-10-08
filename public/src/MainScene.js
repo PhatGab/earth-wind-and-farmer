@@ -1,8 +1,9 @@
 
 import Player from "./Player.js";
 import Pumpkin from './Pumpkin.js';
+import Sign from './Sign.js';
 
-import { gameHeight, gameWidth } from './constants.js';
+import { gameHeight, gameWidth, fontFamily } from './constants.js';
 
 export default class MainScene extends Phaser.Scene {
   constructor() {
@@ -14,11 +15,16 @@ export default class MainScene extends Phaser.Scene {
       x: [50, 100, 150, 200, 250, 300, 350, 400, 450],
       y: [50, 100, 150, 200, 250, 300, 350, 400, 450]
     }
+
+    this.npcTextShown = false;
+    this.npcText = '';
+    this.npcBumpCounter = 0;
   }
 
   preload() {
     Player.preload(this);
     Pumpkin.preload(this);
+    Sign.preload(this);
     this.load.image('tiles', 'assets/images/RPGNatureTilesetExtruded.png');
     this.load.tilemapTiledJSON('map', 'assets/images/map.json');
     this.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
@@ -38,8 +44,8 @@ export default class MainScene extends Phaser.Scene {
     const layer2 = map.createStaticLayer('Tile Layer 2', tileset, 0, 0);
 
     // CREATE PLAYER
-    this.player = new Player({ scene: this, x: 50, y: 50, texture: 'princess', frame: 'princess_walk_1' });
-    const wizard = new Player({ scene: this, x: 100, y: 100, texture: 'wizard', frame: 'wizard_idle_+_walk_4' });
+    this.player = new Player({ scene: this, x: 50, y: 50, texture: 'princess', frame: 'princess_walk_1', id: 'playerCharacter' });
+    const wizard = new Player({ scene: this, x: 100, y: 100, texture: 'wizard', frame: 'wizard_idle_+_walk_4', id: 'NPC' });
     this.add.existing(this.player);
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -84,26 +90,29 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // LOAD PUMPKIN COUNTER
-    this.counter = this.add.text(160, 40, 'NO PUMPKINS YET!', {
-      fontFamily: 'Arial',
+
+    this.pumpkinText = this.add.text(165, 50, 'NO PUMPKINS YET!', {
+      fontFamily: fontFamily,
+			fontSize: '28px',
+			color: '#e9e9e9',
+    });
+
+    this.counter = this.add.text(160, 80, '', {
+      fontFamily: fontFamily,
 			fontSize: '28px',
 			color: '#e9e9e9',
     });
 
     this.successText = this.add.text(190, 300, '', {
-      fontFamily: 'Arial',
+      fontFamily: fontFamily,
 			fontSize: '32px',
 			color: 'orange',
     });
-  }
 
-  addFoliage() {
-    const foliage = this.map.getObjectLayer('Foliage');
-    foliage.objects.forEach(resource => {
-      const foliageItem = new Phaser.Physics.Matter.Sprite(this.matter.world, resource.x, resource.y, 'foliage', 'tree');
-      foliageItem.setStatic(true);
-      this.add.existing(foliageItem);
-    })
+    // Create sign
+    this.sign = new Sign({ scene: this });
+
+  
   }
 
   getPositionValue(positionType) {

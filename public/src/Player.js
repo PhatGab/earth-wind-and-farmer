@@ -1,17 +1,18 @@
 
 import Inventory from './Inventory.js'
+import Sign from './Sign.js';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor(data) {
-        const { scene, x, y, texture, frame } = data;
-        super(scene.matter.world, x, y, texture, frame);
+        const { scene, x, y, texture, frame, id } = data;
+        super(scene.matter.world, x, y, texture, frame, id);
         this.scene.add.existing(this);
 
         this.inventory = new Inventory();
 
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-        const playerCollider = Bodies.circle(this.x, this.y, 8, { isSensor: false, label: 'playerCollider' });
-        const playerSensor = Bodies.circle(this.x, this.y, 16, { isSensor: true, label: 'playerSensor' });
+        const playerCollider = Bodies.circle(this.x, this.y, 8, { isSensor: false, label: id + 'playerCollider' });
+        const playerSensor = Bodies.circle(this.x, this.y, 16, { isSensor: true, label: id + 'playerSensor' });
         const compoundBody = Body.create({
             parts: [playerCollider, playerSensor],
             frictionAir: 0.35
@@ -20,6 +21,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setFixedRotation();
 
         this.scene.matter.world.on('collisionstart', (event) => this.collisionHandler(this, event));
+
+        this.scene.matter.world.on('collisionactive', (event) => this.interactWithNPC(this, event));
+
+        // this.npcTextShown = false;
+        this.currentNPCCollisionID = 0;
 
     }
 
@@ -39,13 +45,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         let bumpedPumpkinID = '';
 
-        if (e.pairs[1]) {
-            console.log('e.pairs[1].bodyA.label', e.pairs[1].bodyA)
-            console.log('e.pairs[1].bodyB.label', e.pairs[1].bodyB)
-        }
-
-        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label === 'playerSensor' && e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) || (e.pairs[1].bodyB.label === 'playerSensor' && e.pairs[1].bodyA.label.startsWith('pumpkinCollider')))) {
-            console.log('YOU JUST BUMPED A PUMP');
+        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label.startsWith('pumpkinCollider')))) {
             
             player.inventory.addItem({
                 name: 'pumpkin',
@@ -57,24 +57,61 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             } else if (e.pairs[1].bodyA.label.startsWith('pumpkinCollider')) {
                 bumpedPumpkinID = e.pairs[1].bodyA.label;
             }
-        }
 
-        const pumpkins = player.scene.pumpkins;
-        const pumpToRemove = pumpkins?.find(pump => pump.id === bumpedPumpkinID);
-        
-        if (pumpToRemove) {
-            pumpToRemove.destroy();
-        }
-        
-        // JILL -- THIS DOES NOT BELONG IN PLAYER.JS
-        const pumpkinQty = player.inventory.getItemQuantity('pumpkin');
-        player.scene.counter.setText(pumpkinQty);
-        player.scene.counter.setX(255);
-
-        if (pumpkinQty >= 6) {
-            player.scene.successText.setText('YOU WIN!');
-        }
+            const pumpkins = player.scene.pumpkins;
+            const pumpToRemove = pumpkins?.find(pump => pump.id === bumpedPumpkinID);
+            
+            if (pumpToRemove) {
+                pumpToRemove.destroy();
+            }
+            
+            // JILL -- THIS DOES NOT BELONG IN PLAYER.JS
+            const pumpkinQty = player.inventory.getItemQuantity('pumpkin');
+    
+            if (pumpkinQty !== 0) {
+                player.scene.pumpkinText.setText("Pumpkins:");
+                player.scene.pumpkinText.setX(200);
+                player.scene.counter.setText(pumpkinQty);
+                player.scene.counter.setX(255);
+            }
+    
+            if (pumpkinQty >= 6) {
+                player.scene.successText.setText('YOU WIN!');
+            }
+        } else if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'signCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'signCollider'))) {
+            Sign.readSign(player.scene);
+        } 
     };
+
+    interactWithNPC(player, e) {
+        if (!player.scene.npcTextShown && e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'NPCplayerSensor') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'NPCplayerSensor'))) {
+            player.scene.npcText = player.scene.add.text(50, 80, "So many pumpkins! Maybe...too many?", {
+                fontFamily: 'Helvetica',
+                fontSize: '12px',
+                color: 'black',
+                wordWrap: { width: 450, useAdvancedWrap: true }
+            });
+            player.scene.npcTextShown = true;
+
+            setTimeout(() => {
+                player.scene.npcText.visible = false;
+                player.scene.npcTextShown = false;
+            }, 3000);
+
+            player.scene.npcBumpCounter++;
+        }
+
+        if (player.scene.npcBumpCounter === 5) {
+            player.scene.npcText.setText("STOP BUMPING ME!");
+            player.scene.npcTextShown = true;
+
+            setTimeout(() => {
+                player.scene.npcText.visible = false;
+                player.scene.npcTextShown = false;
+            }, 3000);
+        }
+
+    }
 
     update() {
         const speed = 2.5;

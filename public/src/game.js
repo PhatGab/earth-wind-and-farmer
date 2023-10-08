@@ -1,6 +1,7 @@
 
 import SplashScene from "./SplashScene.js";
-import MainScene from "./MainScene.js"
+import MainScene from "./MainScene.js";
+import SignScene from './SignScene.js';
 
 import { gameHeight, gameWidth } from './constants.js';
 
@@ -13,7 +14,7 @@ const gameConfig = {
     type: Phaser.AUTO,
     parent: 'earth-wind-farmer',
     // scene: [SplashScene, MainScene],
-    scene: [MainScene],
+    scene: [MainScene, SignScene],
     // scale gives the pixelated vieaw
     scale: {
         zoom: 2
@@ -21,7 +22,7 @@ const gameConfig = {
     physics: {
         default: 'matter',
         matter: {
-            debug: true,
+            debug: false,
             // turn gravity off -- not a platforming 2d game
             gravity: { y: 0 }
         },
