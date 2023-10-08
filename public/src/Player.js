@@ -2,10 +2,12 @@
 import Inventory from './Inventory.js'
 import MonstantoEmployee from './MonsantoEmployee.js';
 
+import { fontFamily } from './constants.js';
+
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor(data) {
-        const { scene, x, y, texture, frame, id } = data;
-        super(scene.matter.world, x, y, texture, frame, id);
+        const { scene, x, y, texture, frame, id, depth } = data;
+        super(scene.matter.world, x, y, texture, frame, id, depth);
         this.scene.add.existing(this);
 
         this.inventory = new Inventory();
@@ -96,11 +98,18 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     interactWithNPC(player, e) {
         if (!player.scene.npcTextShown && e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'NPCplayerSensor') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'NPCplayerSensor'))) {
-            player.scene.npcText = player.scene.add.text(50, 80, "So many pumpkins! Maybe...too many?", {
-                fontFamily: 'Helvetica',
+            let npcPosition = 0;
+
+            if (e.pairs[1].bodyB.label === 'NPCplayerSensor') {
+                npcPosition = e.pairs[1].bodyB.position;
+            } else {
+                npcPosition = e.pairs[1].bodyAds.position;
+            }
+            player.scene.npcText = player.scene.add.text(npcPosition.x - 10, npcPosition.y - 30, `"So many pumpkins! Maybe...too many?"`, {
+                fontFamily: fontFamily,
                 fontSize: '12px',
                 color: 'black',
-                wordWrap: { width: 450, useAdvancedWrap: true }
+                wordWrap: { width: 150, useAdvancedWrap: true }
             });
             player.scene.npcTextShown = true;
 
@@ -114,6 +123,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         if (player.scene.npcBumpCounter === 5) {
             player.scene.npcText.setText("STOP BUMPING ME!");
+            player.scene.npcText.setFont('Georgia, "Goudy Bookletter 1911", Times, serif');
+            player.scene.npcText.setFontSize('18px');
+            player.scene.npcText.setAngle(12.5);
             player.scene.npcTextShown = true;
 
             setTimeout(() => {

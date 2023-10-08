@@ -4,4 +4,4 @@
 export const gameHeight = 512;
 export const gameWidth = 512;
 
-export const fontFamily = 'Helvetica';
+export const fontFamily = 'Verdana, Geneva, Tahoma, sans-serif';

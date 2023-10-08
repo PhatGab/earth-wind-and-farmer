@@ -1,3 +1,5 @@
+// import { fontFamily } from "./constants";
+
 
 export default class MonstantoEmployee extends Phaser.Physics.Matter.Sprite {
     constructor(data) {
@@ -59,7 +61,8 @@ export default class MonstantoEmployee extends Phaser.Physics.Matter.Sprite {
 
     playMonsantoMessage() {
         this.scene.successText = this.scene.add.text(this.x - 30, this.y - 45, "HEY!", {
-            fontFamily: 'Helvetica',
+            // fontFamily: fontFamily,
+            fontFamily: 'Veranda',
             fontSize: '20px',
             color: 'black',
             wordWrap: { width: 200, useAdvancedWrap: true }

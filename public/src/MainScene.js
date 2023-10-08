@@ -51,8 +51,8 @@ export default class MainScene extends Phaser.Scene {
     const layer2 = map.createStaticLayer('Tile Layer 2', tileset, 0, 0);
 
     // CREATE PLAYER
-    this.player = new Player({ scene: this, x: 50, y: 50, texture: 'princess', frame: 'princess_walk_1', id: 'playerCharacter' });
-    const wizard = new Player({ scene: this, x: 100, y: 100, texture: 'wizard', frame: 'wizard_idle_+_walk_4', id: 'NPC' });
+    this.player = new Player({ scene: this, x: 50, y: 50, texture: 'princess', frame: 'princess_walk_1', id: 'playerCharacter', depth: 10 });
+    this.npc = new Player({ scene: this, x: 70, y: 150, texture: 'wizard', frame: 'wizard_idle_+_walk_4', id: 'NPC' });
     this.add.existing(this.player);
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -65,14 +65,15 @@ export default class MainScene extends Phaser.Scene {
     // CREATE AUDIO
     this.song = this.sound.add('theme', { volume: 0.5 });
     // TOGGLE THIS LINE BELOW TO STOP MUSIC ON LOAD
-    // this.song.play();
+    this.song.play();
     this.isPlaying = true;
-    // const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // spaceBar.on('down', () => {
-    //   this.song.setMute(this.isPlaying);
-    //   this.isPlaying = !this.isPlaying;
-    // });
+    const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    spaceBar.on('down', () => {
+      this.song.setMute(this.isPlaying);
+      this.isPlaying = !this.isPlaying;
+    });
 
     for (let i = 0; i < 9; i++) {
 
@@ -98,17 +99,19 @@ export default class MainScene extends Phaser.Scene {
 
     // LOAD PUMPKIN COUNTER
 
-    this.pumpkinText = this.add.text(165, 50, 'NO PUMPKINS YET!', {
+    this.pumpkinText = this.add.text(165, 50, 'Collect Pumpkins!', {
       fontFamily: fontFamily,
 			fontSize: '28px',
-			color: '#e9e9e9',
+			color: '#e9e9e9'
     });
+    this.pumpkinText.setDepth(5);
 
     this.counter = this.add.text(160, 80, '', {
       fontFamily: fontFamily,
 			fontSize: '28px',
 			color: '#e9e9e9',
     });
+    this.counter.setDepth(5);
 
     this.successText = this.add.text(190, 300, '', {
       fontFamily: fontFamily,
