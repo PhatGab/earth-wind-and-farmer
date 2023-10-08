@@ -27,7 +27,7 @@ export default class MainScene extends Phaser.Scene {
     this.employeeShown = false;
 
     this.signShown = false;
-this.FarmhouseShown = false;
+    this.FarmhouseShown = false;
   }
 
   preload() {
@@ -39,8 +39,8 @@ this.FarmhouseShown = false;
     this.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
     this.load.audio('theme', 'assets/audio/Earth_Wind_And_Farmer.mp3');
 
-    this.load.image('tiles', 'assets/plowed_soil.png')
-    this.load.tilemapTiledJSON('map', 'assets/map1.json')
+    this.load.image('tiles', 'assets/plowed_soil.png');
+    this.load.tilemapTiledJSON('map', 'assets/map1.json');
   }
 
   create() {
@@ -120,6 +120,19 @@ this.FarmhouseShown = false;
       fontFamily: fontFamily,
 			fontSize: '32px',
 			color: 'orange',
+      wordWrap: { width: 200, useAdvancedWrap: true }
+    });
+
+    // Create Credits text (empty)
+
+    this.creditsText = this.add.text(75, 150, '', {
+      fontFamily: fontFamily,
+			fontSize: '12px',
+      stroke: "saddlebrown",
+      strokeThickness: .5,
+      fill: 'orange',
+      wordWrap: { width: 200, useAdvancedWrap: true },
+      align: 'center'
     });
 
     // Create sign

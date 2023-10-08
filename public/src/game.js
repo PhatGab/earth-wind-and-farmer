@@ -1,6 +1,7 @@
 
 import SplashScene from "./SplashScene.js";
 import MainScene from "./MainScene.js";
+import CreditsScene from "./CreditsScene.js";
 
 import { gameHeight, gameWidth } from './constants.js';
 
@@ -11,7 +12,7 @@ const gameConfig = {
     backgroundColor: '#fff4b0',
     type: Phaser.AUTO,
     parent: 'earth-wind-farmer',
-    scene: [SplashScene, MainScene],
+    scene: [SplashScene, MainScene, CreditsScene],
     scale: {
         zoom: 2
     },

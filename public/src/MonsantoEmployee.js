@@ -65,6 +65,7 @@ export default class MonstantoEmployee extends Phaser.Physics.Matter.Sprite {
             fontFamily: 'Courier',
             fontSize: '20px',
             color: 'black',
+            depth: 10,
             wordWrap: { width: 200, useAdvancedWrap: true }
         });
 
@@ -74,6 +75,19 @@ export default class MonstantoEmployee extends Phaser.Physics.Matter.Sprite {
             this.scene.successText.setX(this.x - 45);
             this.scene.successText.setText("That's too many pumpkins!");
         }, 1500);
+
+        this.scene.creditsText.setText(`Monsanto thinks you've collected too many pumpkins! Press Enter to see credits, Press 'P' to hide this text`);
+        const enter = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+        const p = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
+        enter.on('down', () => {
+            this.scene.scene.switch('CreditsScene');
+        });
+
+        p.on('down', () => {
+            this.scene.creditsText.setText('');
+          });
+  
     }
 
     collisionHandler(e) {
