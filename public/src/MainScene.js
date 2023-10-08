@@ -13,8 +13,8 @@ export default class MainScene extends Phaser.Scene {
     this.pumpkinCount = 0;
 
     this.positionValues = {
-      x: [50, 100, 150, 200, 250, 300, 350, 400, 450],
-      y: [50, 100, 150, 200, 250, 300, 350, 400, 450]
+      x: [100, 150, 200, 250, 300, 350, 400, 450],
+      y: [100, 150, 200, 250, 300, 350, 400, 450]
     }
 
     this.npcTextShown = false;
@@ -75,7 +75,7 @@ export default class MainScene extends Phaser.Scene {
       this.isPlaying = !this.isPlaying;
     });
 
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 8; i++) {
 
       const xValue = this.getPositionValue('x');
       const yValue = this.getPositionValue('y');
@@ -147,14 +147,14 @@ export default class MainScene extends Phaser.Scene {
   }
 
   setUpSign() {
-    this.signText = this.add.text(320, 160, "", {
-        fontFamily: fontFamily,
+    this.signText = this.add.text(300, 160, "", {
+        fontFamily: 'Shantell Sans',
         fontSize: '22px',
-        color: 'darkslategrey',
+        color: '#663931',
         // stroke: "#000000",
         // strokeThickness: 6,
         // fill: 'red',
-        backgroundColor: '#A0522D',
+        backgroundColor: '#8F563B',
         wordWrap: { width: 200, useAdvancedWrap: true }
     });
   }

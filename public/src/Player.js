@@ -25,7 +25,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.scene.matter.world.on('collisionstart', (event) => this.collisionHandler(this, event));
         this.scene.matter.world.on('collisionactive', (event) => this.interactWithNPC(this, event));
 
-        this.scene.matter.world.on('collisionend', (event) => this.interactWithSign(this, event));
+        this.scene.matter.world.on('collisionend', (event) => this.hideSign(this, event));
 
     }
 
@@ -43,60 +43,72 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     collisionHandler(player, e){
 
-        let bumpedPumpkinID = '';
+        if (e.pairs.length > 1) {
+            const bodyA = e.pairs[1].bodyA.label;
+            const bodyB = e.pairs[1].bodyB.label;
 
-        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label.startsWith('pumpkinCollider')))) {
-            
-            player.inventory.addItem({
-                name: 'pumpkin',
-                quantity: 1
-            });
-
-            if (e.pairs[1].bodyB.label.startsWith('pumpkinCollider')) {
-                bumpedPumpkinID = e.pairs[1].bodyB.label;
-            } else if (e.pairs[1].bodyA.label.startsWith('pumpkinCollider')) {
-                bumpedPumpkinID = e.pairs[1].bodyA.label;
-            }
-
-            const pumpkins = player.scene.pumpkins;
-            const pumpToRemove = pumpkins?.find(pump => pump.id === bumpedPumpkinID);
-            
-            if (pumpToRemove) {
-                pumpToRemove.destroy();
-            }
-            
-            // JILL -- THIS DOES NOT BELONG IN PLAYER.JS
-            const pumpkinQty = player.inventory.getItemQuantity('pumpkin');
+            let bumpedPumpkinID = '';
     
-            if (pumpkinQty !== 0) {
-                player.scene.pumpkinText.setText("Pumpkins:");
-                player.scene.pumpkinText.setX(200);
-                player.scene.counter.setText(pumpkinQty);
-                player.scene.counter.setX(255);
-            }
+            if (e.pairs.length > 1 && ((bodyA.startsWith('playerCharacter') && bodyB.startsWith('pumpkinCollider')) || (bodyB.startsWith('playerCharacter') && bodyA.startsWith('pumpkinCollider')))) {
+                
+                player.inventory.addItem({
+                    name: 'pumpkin',
+                    quantity: 1
+                });
     
-            if (pumpkinQty == 5 && !player.scene.employeeShown) {
-                const playerCoordinates = e.pairs[1].bodyA.position;
-
-                player.scene.employeeShown = true;
-
-                const employee = new MonstantoEmployee({scene: player.scene, x: 50, y: 50, texture: 'employee', frame: 'townsfolk_f_idle_1', id: 'employee', playerCoordinates});
-                employee.enterScene(player);
-            }
-        } 
-        else if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'signCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'signCollider'))) {
-            player.scene.sign.readSign(player.scene);
-            player.scene.signShown = true;
-
-            setTimeout(() => {
-                if (player.scene.signShown) {
-                    player.scene.sign.hideSign(player.scene);
+                if (bodyB.startsWith('pumpkinCollider')) {
+                    bumpedPumpkinID = bodyB;
+                } else if (bodyA.startsWith('pumpkinCollider')) {
+                    bumpedPumpkinID = bodyA;
                 }
-            }, 5000);
-        } 
+    
+                const pumpkins = player.scene.pumpkins;
+                const pumpToRemove = pumpkins?.find(pump => pump.id === bumpedPumpkinID);
+                
+                if (pumpToRemove) {
+                    pumpToRemove.destroy();
+                }
+                
+                // JILL -- THIS DOES NOT BELONG IN PLAYER.JS
+                const pumpkinQty = player.inventory.getItemQuantity('pumpkin');
+        
+                if (pumpkinQty !== 0) {
+                    player.scene.pumpkinText.setText("Pumpkins:");
+                    player.scene.pumpkinText.setX(200);
+                    player.scene.counter.setText(pumpkinQty);
+                    player.scene.counter.setX(255);
+                }
+        
+                if (pumpkinQty == 5 && !player.scene.employeeShown) {
+                    const playerCoordinates = e.pairs[1].bodyA.position;
+    
+                    player.scene.employeeShown = true;
+    
+                    const employee = new MonstantoEmployee({scene: player.scene, x: 50, y: 50, texture: 'employee', frame: 'townsfolk_f_idle_1', id: 'employee', playerCoordinates});
+                    employee.enterScene(player);
+                }
+            } 
+    
+            // Bump into sign - open sign
+                else if (e.pairs.length > 1 && ((bodyA.startsWith('playerCharacter') && bodyB === 'signCollider') || (bodyB.startsWith('playerCharacter') && bodyA === 'signCollider'))) {
+    
+                player.scene.sign.readSign(player.scene);
+    
+                player.scene.signShown = true;
+    
+                setTimeout(() => {
+                    if (player.scene.signShown) {
+                        player.scene.sign.hideSign(player.scene);
+                    }
+                }, 5000);
+            } 
+        }
+
+
     };
 
     interactWithNPC(player, e) {
+
         if (!player.scene.npcTextShown && e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'NPCplayerSensor') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'NPCplayerSensor'))) {
             let npcPosition = 0;
 
@@ -136,7 +148,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     }
 
-    interactWithSign(player, e) {
+    hideSign(player, e) {
         if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'signCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'signCollider'))) {
             player.scene.sign.hideSign(player.scene);
         }
