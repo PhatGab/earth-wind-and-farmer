@@ -11,7 +11,7 @@ const gameConfig = {
     backgroundColor: '#fff4b0',
     type: Phaser.AUTO,
     parent: 'earth-wind-farmer',
-    scene: [SplashScene, MainScene],
+    scene: [/*SplashScene,*/ MainScene],
     scale: {
         zoom: 2
     },

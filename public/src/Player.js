@@ -26,6 +26,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.scene.matter.world.on('collisionactive', (event) => this.interactWithNPC(this, event));
 
         this.scene.matter.world.on('collisionend', (event) => this.hideSign(this, event));
+        this.scene.matter.world.on('collisionend', (event) => this.hideFarmhouse(this, event));
 
     }
 
@@ -102,6 +103,23 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                     }
                 }, 5000);
             } 
+      
+      
+        // Bump into Farmhouse - open farmhouse
+                else if (e.pairs.length > 1 && ((bodyA.startsWith('playerCharacter') && bodyB === 'signCollider') || (bodyB.startsWith('playerCharacter') && bodyA === 'signCollider'))) {
+    
+                player.scene.Farmhouse.readFarmhouse(player.scene);
+    
+                player.scene.FarmhouseShown = true;
+    
+                setTimeout(() => {
+                    if (player.scene.FarmhouseShown) {
+                        player.scene.Farmhouse.hideFarmhouse(player.scene);
+                    }
+                }, 5000);
+            } 
+      
+      
         }
 
 
@@ -154,6 +172,19 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
     }
 
+
+
+hideFarmhouse(player, e) {
+        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'FarmhouseCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'FarmhouseCollider'))) {
+            player.scene.Farmhouse.hideFarmhouse(player.scene);
+        }
+    }
+
+
+
+
+
+    
     update() {
         const speed = 2.5;
         let playerVelocity = new Phaser.Math.Vector2();

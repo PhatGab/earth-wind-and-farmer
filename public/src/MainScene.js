@@ -3,6 +3,9 @@ import Player from "./Player.js";
 import MonstantoEmployee from "./MonsantoEmployee.js";
 import Pumpkin from './Pumpkin.js';
 import Sign from './Sign.js';
+import Farmhouse from './Farmhouse.js';
+
+
 
 import { gameHeight, gameWidth, fontFamily } from './constants.js';
 
@@ -24,7 +27,7 @@ export default class MainScene extends Phaser.Scene {
     this.employeeShown = false;
 
     this.signShown = false;
-
+this.FarmhouseShown = false;
   }
 
   preload() {
@@ -32,6 +35,7 @@ export default class MainScene extends Phaser.Scene {
     MonstantoEmployee.preload(this);
     Pumpkin.preload(this);
     Sign.preload(this);
+    Farmhouse.preload(this);
     this.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
     this.load.audio('theme', 'assets/audio/Earth_Wind_And_Farmer.mp3');
 
@@ -122,6 +126,10 @@ export default class MainScene extends Phaser.Scene {
     this.sign = new Sign({ scene: this });
     this.setUpSign();
 
+
+    //create farmhouse
+  this.Farmhouse = new Farmhouse({ scene: this });
+    this.setUpFarmhouse();
   }
 
   getPositionValue(positionType) {
@@ -158,6 +166,25 @@ export default class MainScene extends Phaser.Scene {
     });
   }
 
+setUpFarmhouse() {
+    this.FarmhouseText = this.add.text(300, 160, "", {
+        fontFamily: 'Shantell Sans',
+        fontSize: '22px',
+        color: '#663931',
+        // stroke: "#000000",
+        // strokeThickness: 6,
+        // fill: 'red',
+        backgroundColor: '#8F563B',
+        wordWrap: { width: 200, useAdvancedWrap: true }
+    });
+  }
+
+
+
+
+
+
+  
   update() {
     this.player.update();
   }
