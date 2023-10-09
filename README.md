@@ -1,4 +1,4 @@
-# Earth, Wind, & Farmer
+# Earth, Wind, & Farmer :jack_o_lantern:
 
 ## Table of Contents
 
@@ -19,12 +19,12 @@ This delightful, albiet brief game was created as part of [Virtual Turtle Games]
 
 ## Assets
 Thank you to these amazing artists!
-[Characters](https://superdark.itch.io/)
-[Pumpkin](https://elenetari.itch.io/halloween-decorations-free-demo)
-[Sign](https://gx310.itch.io/sign-posts)
-[FarmHouse](https://www.hiclipart.com/free-transparent-background-png-clipart-puhor)
-Original beat by Gabe!
+* [Characters](https://superdark.itch.io/)
+* [Pumpkin](https://elenetari.itch.io/halloween-decorations-free-demo)
+* [Sign](https://gx310.itch.io/sign-posts)
+* [FarmHouse](https://www.hiclipart.com/free-transparent-background-png-clipart-puhor)
+* Original beat :musical_score: by Gabe!
 
 ## Programs
-[Tiled](https://www.mapeditor.org/)
-[Gamma Atlas Packer](https://gammafp.com/tool/atlas-packer/)
+* [Tiled](https://www.mapeditor.org/)
+* [Gamma Atlas Packer](https://gammafp.com/tool/atlas-packer/)
