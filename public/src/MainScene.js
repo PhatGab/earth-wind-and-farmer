@@ -5,8 +5,6 @@ import Pumpkin from './Pumpkin.js';
 import Sign from './Sign.js';
 import Farmhouse from './Farmhouse.js';
 
-
-
 import { gameHeight, gameWidth, fontFamily } from './constants.js';
 
 export default class MainScene extends Phaser.Scene {
@@ -27,7 +25,10 @@ export default class MainScene extends Phaser.Scene {
     this.employeeShown = false;
 
     this.signShown = false;
-    this.FarmhouseShown = false;
+    this.farmhouseShown = false;
+
+    this.audioStarted = false;
+    this.songPlaying = false;
   }
 
   preload() {
@@ -49,7 +50,6 @@ export default class MainScene extends Phaser.Scene {
     const map = this.make.tilemap({ key: 'map', tileWidth: 32, tileHeight: 32 });
     const tileset = map.addTilesetImage('plowed_soil', 'tiles');
 
-
     const layer1 = map.createStaticLayer('Tile Layer 1', tileset, 0, 0);
     const layer2 = map.createStaticLayer('FenceLayer', tileset, 0, 0);
 
@@ -65,17 +65,19 @@ export default class MainScene extends Phaser.Scene {
     });
 
 
-    // CREATE AUDIO
+    // CREATE AUDIO TEXT
     this.song = this.sound.add('theme', { volume: 0.5 });
-    // TOGGLE THIS LINE BELOW TO STOP MUSIC ON LOAD
-    this.song.play();
-    this.isPlaying = true;
+    this.audioText = this.add.text(325, 5, 'Use the spacebar to start audio!', {
+      fontFamily: fontFamily,
+			fontSize: '10px',
+			color: '#e9e9e9',
+    });
+    this.audioText.setDepth(5);
 
     const spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    spaceBar.on('down', () => {
-      this.song.setMute(this.isPlaying);
-      this.isPlaying = !this.isPlaying;
+    spaceBar.on('down', () => { 
+      this.handleAudio();
     });
 
     for (let i = 0; i < 8; i++) {
@@ -120,12 +122,11 @@ export default class MainScene extends Phaser.Scene {
       fontFamily: fontFamily,
 			fontSize: '32px',
 			color: 'orange',
-      wordWrap: { width: 200, useAdvancedWrap: true }
+      wordWrap: { width: 50, useAdvancedWrap: true }
     });
 
     // Create Credits text (empty)
-
-    this.creditsText = this.add.text(75, 150, '', {
+    this.creditsText = this.add.text(170, 150, '', {
       fontFamily: fontFamily,
 			fontSize: '12px',
       stroke: "saddlebrown",
@@ -141,7 +142,7 @@ export default class MainScene extends Phaser.Scene {
 
 
     //create farmhouse
-  this.Farmhouse = new Farmhouse({ scene: this });
+    this.farmhouse = new Farmhouse({ scene: this });
     this.setUpFarmhouse();
   }
 
@@ -166,38 +167,41 @@ export default class MainScene extends Phaser.Scene {
     return selectedVal;
   }
 
+  handleAudio() {
+    if (!this.audioStarted) {
+      this.song.play();
+      this.audioStarted = true;
+      this.songPlaying = true;
+      this.audioText.setText('Use the spacebar to toggle this sick beat!');
+      this.audioText.setX(300);
+    } else {
+      this.song.setMute(this.songPlaying);
+      this.songPlaying = !this.songPlaying;
+    }
+   }
+
   setUpSign() {
     this.signText = this.add.text(300, 160, "", {
         fontFamily: 'Shantell Sans',
         fontSize: '22px',
         color: '#663931',
-        // stroke: "#000000",
-        // strokeThickness: 6,
-        // fill: 'red',
+
         backgroundColor: '#8F563B',
         wordWrap: { width: 200, useAdvancedWrap: true }
     });
   }
 
 setUpFarmhouse() {
-    this.FarmhouseText = this.add.text(300, 160, "", {
-        fontFamily: 'Shantell Sans',
-        fontSize: '22px',
+    this.farmhouseText = this.add.text(400, 110, "", {
+        fontFamily: fontFamily,
+        fontSize: '10px',
         color: '#663931',
-        // stroke: "#000000",
-        // strokeThickness: 6,
-        // fill: 'red',
         backgroundColor: '#8F563B',
-        wordWrap: { width: 200, useAdvancedWrap: true }
+        wordWrap: { width: 50, useAdvancedWrap: true },
+        align: 'center'
     });
   }
 
-
-
-
-
-
-  
   update() {
     this.player.update();
   }

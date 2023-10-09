@@ -6,17 +6,17 @@ export default class Farmhouse extends Prop {
 
         super({
             scene,
-            x: 60, // lol
-            y: 380,
+            x: 60,
+            y: 450,
             texture: 'Farmhouse'
         });
 
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-        const FarmhouseCollider = Bodies.circle(this.x, this.y, 16, { isSensor: false, label: 'FarmhouseCollider' });
-        const FarmhouseSensor = Bodies.circle(this.x, this.y, 24, { isSensor: true, label: 'FarmhouseSensor' });
+        const farmhouseCollider = Bodies.circle(this.x, this.y, 22, { isSensor: false, label: 'farmhouseCollider' });
+        const farmhouseSensor = Bodies.circle(this.x, this.y, 30, { isSensor: true, label: 'farmhouseSensor' });
 
         const compoundBody = Body.create({
-            parts: [FarmhouseCollider, FarmhouseSensor],
+            parts: [farmhouseCollider, farmhouseSensor],
             frictionAir: 0.35
         });
         
@@ -30,16 +30,16 @@ export default class Farmhouse extends Prop {
     }
 
     readFarmhouse(scene) {
-        scene.FarmhouseText.setText(`"Don't collect too many pumpkins!"`);
-        scene.FarmhouseText.setDepth(5);
-        scene.FarmhouseText.setPadding(10);
-        scene.FarmhouseShown = true;
+        scene.farmhouseText.setText("No pumpkins in here!");
+        scene.farmhouseText.setDepth(5);
+        scene.farmhouseText.setPadding(2.5);
+        scene.farmhouseShown = true;
     }
 
     hideFarmhouse(scene) {
-        scene.FarmhouseText.setText('');
-        scene.FarmhouseText.setPadding(0);
-        scene.FarmhouseShown = false;
+        scene.farmhouseText.setText('');
+        scene.farmhouseText.setPadding(0);
+        scene.farmhouseShown = false;
     }
 
 }

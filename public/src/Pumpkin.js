@@ -40,8 +40,4 @@ export default class Pumpkin extends Prop {
         scene.load.atlas('foliage', 'assets/images/foliage.png', 'assets/images/foliage_atlas.json');
     }
 
-    update() {
-
-    }
-
 }

@@ -11,6 +11,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.scene.add.existing(this);
 
         this.inventory = new Inventory();
+        this.employeeConfrontation = false;
 
         const { Body, Bodies } = Phaser.Physics.Matter.Matter;
         const playerCollider = Bodies.circle(this.x, this.y, 8, { isSensor: false, label: id + 'playerCollider' });
@@ -27,7 +28,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         this.scene.matter.world.on('collisionend', (event) => this.hideSign(this, event));
         this.scene.matter.world.on('collisionend', (event) => this.hideFarmhouse(this, event));
-
     }
 
     static preload(scene) {
@@ -82,10 +82,21 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         
                 if (pumpkinQty == 5 && !player.scene.employeeShown) {
                     const playerCoordinates = e.pairs[1].bodyA.position;
+
+                    player.message = player.scene.add.text(player.x - 5, player.y - 5, 'Run!', {
+                        fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
+                          fontSize: '10px',
+                          color: '#e9e9e9',
+                      });
+                    player.message.setDepth(5);
+                    
+                    setTimeout(() => {
+                        player.message.setText('');
+                    }, 500);
     
                     player.scene.employeeShown = true;
     
-                    const employee = new MonstantoEmployee({scene: player.scene, x: 50, y: 50, texture: 'employee', frame: 'townsfolk_f_idle_1', id: 'employee', playerCoordinates});
+                    const employee = new MonstantoEmployee({scene: player.scene, x: 50, y: 50, texture: 'employee', frame: 'townsfolk_f_idle_1', id: 'employee', playerCoordinates, player});
                     employee.enterScene(player);
                 }
             } 
@@ -94,7 +105,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 else if (e.pairs.length > 1 && ((bodyA.startsWith('playerCharacter') && bodyB === 'signCollider') || (bodyB.startsWith('playerCharacter') && bodyA === 'signCollider'))) {
     
                 player.scene.sign.readSign(player.scene);
-    
                 player.scene.signShown = true;
     
                 setTimeout(() => {
@@ -104,66 +114,66 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 }, 5000);
             } 
       
-      
-        // Bump into Farmhouse - open farmhouse
-                else if (e.pairs.length > 1 && ((bodyA.startsWith('playerCharacter') && bodyB === 'signCollider') || (bodyB.startsWith('playerCharacter') && bodyA === 'signCollider'))) {
+            // Bump into Farmhouse - open farmhouse message
+                else if (e.pairs.length > 1 && ((bodyA.startsWith('playerCharacter') && bodyB === 'farmhouseCollider') || (bodyB.startsWith('playerCharacter') && bodyA === 'farmhouseCollider'))) {
     
-                player.scene.Farmhouse.readFarmhouse(player.scene);
-    
-                player.scene.FarmhouseShown = true;
+                player.scene.farmhouse.readFarmhouse(player.scene);
+                player.scene.farmhouseShown = true;
     
                 setTimeout(() => {
-                    if (player.scene.FarmhouseShown) {
-                        player.scene.Farmhouse.hideFarmhouse(player.scene);
+                    if (player.scene.farmhouseShown) {
+                        player.scene.farmhouse.hideFarmhouse(player.scene);
                     }
                 }, 5000);
-            } 
-      
-      
+            }
         }
-
-
     };
 
     interactWithNPC(player, e) {
 
-        if (!player.scene.npcTextShown && e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'NPCplayerSensor') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'NPCplayerSensor'))) {
-            let npcPosition = 0;
+        if (e.pairs.length > 1) {
+            const bodyA = e.pairs[1].bodyA.label;
+            const bodyB = e.pairs[1].bodyB.label;
 
-            if (e.pairs[1].bodyB.label === 'NPCplayerSensor') {
-                npcPosition = e.pairs[1].bodyB.position;
-            } else {
-                npcPosition = e.pairs[1].bodyAds.position;
+            if (!player.scene.npcTextShown && ((bodyA.startsWith('playerCharacter') && bodyB === 'NPCplayerSensor') || (bodyB.startsWith('playerCharacter') && bodyA === 'NPCplayerSensor'))) {
+                let npcPosition = 0;
+
+                if (bodyB === 'NPCplayerSensor') {
+                    npcPosition = e.pairs[1].bodyB.position;
+                } else {
+                    npcPosition = e.pairs[1].bodyAds.position;
+                }
+                player.scene.npcText = player.scene.add.text(npcPosition.x - 10, npcPosition.y - 30, `"So many pumpkins! Maybe...too many?"`, {
+                    fontFamily: fontFamily,
+                    fontSize: '12px',
+                    color: 'black',
+                    wordWrap: { width: 150, useAdvancedWrap: true }
+                });
+                player.scene.npcTextShown = true;
+
+                setTimeout(() => {
+                    player.scene.npcText.visible = false;
+                    player.scene.npcTextShown = false;
+                }, 3000);
+
+                player.scene.npcBumpCounter++;
             }
-            player.scene.npcText = player.scene.add.text(npcPosition.x - 10, npcPosition.y - 30, `"So many pumpkins! Maybe...too many?"`, {
-                fontFamily: fontFamily,
-                fontSize: '12px',
-                color: 'black',
-                wordWrap: { width: 150, useAdvancedWrap: true }
-            });
-            player.scene.npcTextShown = true;
 
-            setTimeout(() => {
-                player.scene.npcText.visible = false;
-                player.scene.npcTextShown = false;
-            }, 3000);
+            if (player.scene.npcBumpCounter === 5) {
+                player.scene.npcText.setText("STOP BUMPING ME!");
+                player.scene.npcText.setFont('Georgia, "Goudy Bookletter 1911", Times, serif');
+                player.scene.npcText.setFontSize('18px');
+                player.scene.npcText.setAngle(12.5);
+                player.scene.npcTextShown = true;
 
-            player.scene.npcBumpCounter++;
+                setTimeout(() => {
+                    player.scene.npcText.visible = false;
+                    player.scene.npcTextShown = false;
+                }, 3000);
+            } else if ((bodyA.startsWith('playerCharacter') && bodyB.startsWith('employee')) || (bodyB.startsWith('playerCharacter') && bodyA.startsWith('employee'))) {
+                player.employeeConfrontation = true;
+            }
         }
-
-        if (player.scene.npcBumpCounter === 5) {
-            player.scene.npcText.setText("STOP BUMPING ME!");
-            player.scene.npcText.setFont('Georgia, "Goudy Bookletter 1911", Times, serif');
-            player.scene.npcText.setFontSize('18px');
-            player.scene.npcText.setAngle(12.5);
-            player.scene.npcTextShown = true;
-
-            setTimeout(() => {
-                player.scene.npcText.visible = false;
-                player.scene.npcTextShown = false;
-            }, 3000);
-        }
-
     }
 
     hideSign(player, e) {
@@ -172,28 +182,23 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
     }
 
-
-
-hideFarmhouse(player, e) {
-        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'FarmhouseCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'FarmhouseCollider'))) {
-            player.scene.Farmhouse.hideFarmhouse(player.scene);
+    hideFarmhouse(player, e) {
+        if (e.pairs.length > 1 && ((e.pairs[1].bodyA.label.startsWith('playerCharacter') && e.pairs[1].bodyB.label === 'farmhouseCollider') || (e.pairs[1].bodyB.label.startsWith('playerCharacter') && e.pairs[1].bodyA.label === 'farmhouseCollider'))) {
+            player.scene.farmhouse.hideFarmhouse(player.scene);
         }
     }
 
-
-
-
-
-    
     update() {
         const speed = 2.5;
         let playerVelocity = new Phaser.Math.Vector2();
         if (this.inputKeys.left.isDown) {
             playerVelocity.x = -1;
             this.setScale(-1, 1);
+            this.setFixedRotation(0);
         } else if (this.inputKeys.right.isDown) {
             playerVelocity.x = 1;
             this.setScale(1, 1);
+            this.setFixedRotation(0);
         }
         if (this.inputKeys.up.isDown) {
             playerVelocity.y = -1;

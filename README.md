@@ -23,6 +23,7 @@ Thank you to these amazing artists!
 [Pumpkin](https://elenetari.itch.io/halloween-decorations-free-demo)
 [Sign](https://gx310.itch.io/sign-posts)
 [FarmHouse](https://www.hiclipart.com/free-transparent-background-png-clipart-puhor)
+Original beat by Gabe!
 
 ## Programs
 [Tiled](https://www.mapeditor.org/)
